@@ -1,0 +1,9 @@
+version: '3.6'
+
+services:
+  php_base:
+    build: php
+    image: docker.pkg.github.com/rehearsalsbooking/backend/php-base:latest
+  node_base:
+    build: node
+    image: docker.pkg.github.com/rehearsalsbooking/frontend/node-base:latest
