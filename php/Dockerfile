@@ -21,6 +21,14 @@ RUN set -xe && apk update && apk add --no-cache \
 
 RUN docker-php-ext-install intl pdo pgsql pdo_pgsql zip sockets
 
+# GD
+RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev zlib libjpeg-turbo-dev && \
+  docker-php-ext-configure gd \
+     --enable-gd \
+     --with-freetype \
+     --with-jpeg && \
+  docker-php-ext-install gd
+
 # Logs
 RUN mkdir -p /var/log/php7-fpm && \
     chown -R www-data:www-data /var/log/php7-fpm
