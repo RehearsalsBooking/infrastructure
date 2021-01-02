@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-alpine
+FROM php:8-fpm-alpine
 
 # Install modules
 RUN set -xe && apk update && apk add --no-cache \
@@ -30,8 +30,8 @@ RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev zli
   docker-php-ext-install gd
 
 # Logs
-RUN mkdir -p /var/log/php7-fpm && \
-    chown -R www-data:www-data /var/log/php7-fpm
+RUN mkdir -p /var/log/php8-fpm && \
+    chown -R www-data:www-data /var/log/php8-fpm
 
 # Install composer && global asset plugin
 ENV COMPOSER_HOME $HOME/.composer
