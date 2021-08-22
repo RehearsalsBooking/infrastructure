@@ -17,6 +17,10 @@ RUN set -xe && apk update && apk add --no-cache \
     autoconf \
     g++ \
     make \
+    jpegoptim \
+    optipng \
+    pngquant \
+    gifsicle \
     unrar
 
 RUN docker-php-ext-install intl pdo pgsql pdo_pgsql zip sockets exif
