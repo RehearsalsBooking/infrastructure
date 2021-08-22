@@ -19,7 +19,7 @@ RUN set -xe && apk update && apk add --no-cache \
     make \
     unrar
 
-RUN docker-php-ext-install intl pdo pgsql pdo_pgsql zip sockets
+RUN docker-php-ext-install intl pdo pgsql pdo_pgsql zip sockets exif
 
 # GD
 RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev zlib libjpeg-turbo-dev && \
