@@ -6,7 +6,7 @@ SHELL = /bin/sh
 
 docker_bin := $(shell command -v docker 2> /dev/null)
 docker_compose_bin := $(shell command -v docker-compose 2> /dev/null)
-docker_compose_yml := docker-compose.yml
+docker_compose_yml := docker-compose.build.yml
 
 .PHONY : help pull build push login test clean \
          app-pull app app-push\
@@ -20,7 +20,7 @@ help:  ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
 build: ## Build containers
-	$(docker_compose_bin) --file "$(docker_compose_yml)" build
+	$(docker_compose_bin) --file "$(docker_compose_yml)" build --no-cache
 
 push: ## Push containers to github
 	$(docker_compose_bin) --file "$(docker_compose_yml)" push

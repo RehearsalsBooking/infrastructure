@@ -21,17 +21,21 @@ RUN set -xe && apk update && apk add --no-cache \
     optipng \
     pngquant \
     gifsicle \
-    unrar
+    unrar \
+    freetype \
+    libpng \
+    libjpeg-turbo \
+    freetype-dev \
+    libpng-dev \
+    zlib \
+    libjpeg-turbo-dev \
+    && rm -rf /var/cache/apk/*
 
-RUN docker-php-ext-install intl pdo pgsql pdo_pgsql zip sockets exif
-
-# GD
-RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev zlib libjpeg-turbo-dev && \
-  docker-php-ext-configure gd \
-     --enable-gd \
-     --with-freetype \
-     --with-jpeg && \
-  docker-php-ext-install gd
+RUN docker-php-ext-configure gd \
+         --enable-gd \
+         --with-freetype \
+         --with-jpeg && \
+    docker-php-ext-install intl pdo pgsql pdo_pgsql zip sockets exif gd
 
 # Logs
 RUN mkdir -p /var/log/php8-fpm && \
