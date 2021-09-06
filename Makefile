@@ -7,6 +7,7 @@ SHELL = /bin/sh
 docker_bin := $(shell command -v docker 2> /dev/null)
 docker_compose_bin := $(shell command -v docker-compose 2> /dev/null)
 docker_compose_base_yml := base/docker-compose.build.yml
+docker_compose_prod_yml := docker-compose.yml
 
 .PHONY : help pull build push login test clean \
          app-pull app app-push\
@@ -24,3 +25,24 @@ update-base: ## Build and push base containers
 	$(docker_compose_bin) --file "$(docker_compose_base_yml)" push
 
 
+deploy: check-environment
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" pull
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" down -v --remove-orphans
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" up -d
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec backend php artisan storage:link
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec backend php artisan migrate --force
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec backend php artisan key:generate
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec backend php artisan config:cache
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec backend php artisan route:cache
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec backend php artisan view:cache
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec backend sh -c "chown -R www-data:www-data /app/storage/"
+
+check-environment:
+ifeq ("$(wildcard .env)","")
+	- @echo Copying ".env.example";
+	- cp .env.example .env
+endif
+ifeq ("$(wildcard .env.backend)","")
+	- @echo Copying ".env.backend.example";
+	- cp .env.backend.example .env.backend
+endif

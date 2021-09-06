@@ -1,4 +1,5 @@
 .idea
-data
 .env
 .env.backend
+/data/nginx/
+/data/postgres/
