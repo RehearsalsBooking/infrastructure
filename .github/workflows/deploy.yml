@@ -12,14 +12,13 @@ jobs:
       url: 142.93.99.186
     steps:
       - name: deploy
-        uses: appleboy/ssh-action@v0.1.2
+        uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.SSH_HOST}}
           key: ${{secrets.SSH_SECRET}}
           username: ${{ secrets.SSH_USER }}
-
+          debug: true
           script: |
-            mkdir test
             cd ~/infrastructure
             git reset --hard
             git pull
