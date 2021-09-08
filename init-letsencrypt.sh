@@ -1,6 +1,6 @@
 #!/bin/bash
 
-domains=(festic.ru www.festic.ru)
+domains=(festic.ru)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="business@belamov.com" # Adding a valid address is strongly recommended
