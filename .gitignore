@@ -3,3 +3,4 @@
 .env.backend
 /data/nginx/
 /data/postgres/
+/data/certbot/
