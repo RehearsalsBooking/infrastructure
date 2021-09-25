@@ -32,7 +32,6 @@ deploy: check-environment
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" up -d
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan storage:link
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan migrate --force
-	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan key:generate
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan config:cache
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan route:cache
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan view:cache
