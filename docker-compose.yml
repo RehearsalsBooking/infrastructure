@@ -2,6 +2,11 @@ version: '3.5'
 
 
 services:
+  frontend:
+    image: docker.pkg.github.com/rehearsalsbooking/frontend/frontend:production
+    volumes:
+      - frontend-volume:/frontend
+
   backend:
     hostname: backend
     image: docker.pkg.github.com/rehearsalsbooking/backend/backend:production
@@ -13,10 +18,16 @@ services:
     depends_on:
       - db
 
-  frontend:
-    image: docker.pkg.github.com/rehearsalsbooking/frontend/frontend:production
+  backend-demo:
+    hostname: backend-demoo
+    image: docker.pkg.github.com/rehearsalsbooking/backend/backend:production
+    restart: unless-stopped
     volumes:
-      - frontend-volume:/frontend
+      - .env.backend.demo:/app/.env
+      - ./data/demo-storage/:/app/storage/
+      - backend-demo-volume:/app
+    depends_on:
+      - db
 
   db:
     image: postgres:alpine
@@ -25,10 +36,20 @@ services:
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
 
+  db-demo:
+    image: postgres:alpine
+    env_file:
+      - .env
+    volumes:
+      - ./data/postgres-demo:/var/lib/postgresql/data
+    ports:
+      - "5432:5433"
+
   nginx:
     image: nginx:alpine
     ports:
       - "80:80"
+      - "81:81"
       - "443:443"
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     restart: unless-stopped
@@ -43,7 +64,9 @@ services:
     depends_on:
       - frontend
       - backend
+      - backend-demo
       - db
+      - db-demo
 
   certbot:
     image: certbot/certbot
@@ -56,3 +79,4 @@ services:
 volumes:
   frontend-volume:
   backend-volume:
+  backend-demo-volume:
