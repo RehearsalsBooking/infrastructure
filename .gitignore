@@ -1,8 +1,6 @@
 .idea
 .env
 .env.backend
-.env.backend.demo
 /data/nginx/
 /data/postgres/
-/data/postgres-demo/
 /data/certbot/
