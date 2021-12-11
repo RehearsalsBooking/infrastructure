@@ -1,0 +1,27 @@
+api:
+    dashboard: true
+    insecure: false
+
+entryPoints:
+    http:
+        address: ":80"
+        http:
+            redirections:
+                entryPoint:
+                    to: https
+    https:
+        address: ":443"
+
+providers:
+    docker:
+        endpoint: "unix:///var/run/docker.sock"
+        exposedByDefault: false
+
+certificatesResolvers:
+    digital-ocean:
+        acme:
+            email: business@belamov.com
+            storage: /letsencrypt/acme.json
+            dnsChallenge:
+                provider: digitalocean
+                delayBeforeCheck: 0

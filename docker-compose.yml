@@ -4,23 +4,27 @@ version: '3.5'
 services:
     traefik:
         image: traefik:v2.5
-        command:
-            - --api.insecure=false
-            - --providers.docker
-            - --providers.docker.exposedbydefault=false
-            - --entrypoints.websecure.address=:443
-            - --entrypoints.web.address=:80
-            - --certificatesresolvers.myresolver.acme.httpchallenge=true
-            - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
-            - --certificatesresolvers.myresolver.acme.email=business@belamov.com
-            - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
         ports:
             - "80:80"
             - "443:443"
-            - "8080:8080"
         volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
             - ./letsencrypt:/letsencrypt
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./traefik.yml:/traefik.yml:ro
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.traefik.entrypoints=http
+            - traefik.http.routers.traefik.rule=Host(`traefik.festic.ru`)
+            - traefik.http.middlewares.traefik-auth.basicauth.users=${AUTH_USER}:${AUTH_PASSWORD}
+            - traefik.http.routers.traefik-secure.entrypoints=https
+            - traefik.http.routers.traefik-secure.rule=Host(`traefik.festic.ru`)
+            - traefik.http.routers.traefik-secure.middlewares=traefik-auth
+            - traefik.http.routers.traefik-secure.tls=true
+            - traefik.http.routers.traefik-secure.tls.certresolver=cloudflare
+            - traefik.http.routers.traefik-secure.tls.domains[0].main=festic.ru
+            - traefik.http.routers.traefik-secure.tls.domains[0].sans=*.festic.ru
+            - traefik.http.routers.traefik-secure.service=api@internal
+
     backend:
         hostname: backend
         image: docker.pkg.github.com/rehearsalsbooking/backend/backend:production
@@ -33,8 +37,8 @@ services:
         labels:
             - traefik.enable=true
             - traefik.http.routers.backend.rule=Host(`api.festic.ru`)
-            - traefik.http.routers.backend.entrypoints=websecure
-            - traefik.http.routers.backend.tls.certresolver=myresolver
+            - traefik.http.routers.backend.entrypoints=https
+            - traefik.http.routers.backend.tls.certresolver=digital-ocean
 
     frontend:
         image: docker.pkg.github.com/rehearsalsbooking/frontend/frontend:production
@@ -43,8 +47,8 @@ services:
         labels:
             - traefik.enable=true
             - traefik.http.routers.frontend.rule=Host(`festic.ru`)
-            - traefik.http.routers.frontend.entrypoints=websecure
-            - traefik.http.routers.frontend.tls.certresolver=myresolver
+            - traefik.http.routers.frontend.entrypoints=https
+            - traefik.http.routers.frontend.tls.certresolver=digital-ocean
 
     db:
         image: postgres:alpine
