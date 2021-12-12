@@ -38,8 +38,8 @@ services:
             - backend
         labels:
             - traefik.enable=true
-            - traefik.http.routers.backend.rule=Host(`api.festic.ru`)
-            - traefik.http.routers.backend.entrypoints=https
+            - traefik.http.routers.nginx.rule=Host(`api.festic.ru`)
+            - traefik.http.routers.nginx.entrypoints=https
 
     backend:
         hostname: backend
