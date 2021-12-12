@@ -34,8 +34,8 @@ services:
         image: docker.pkg.github.com/rehearsalsbooking/backend/backend:demo
         restart: unless-stopped
         volumes:
-            - .env.backend-demo:/app/.env
-            - backend-demo-volume:/app
+            - .env.backend-demo:/app-demo/.env
+            - backend-demo-volume:/app-demo
         depends_on:
             - db
 
