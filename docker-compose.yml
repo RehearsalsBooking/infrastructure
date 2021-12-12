@@ -31,7 +31,6 @@ services:
         image: nginx:alpine
         volumes:
             - backend-volume:/app
-            - ./data/storage/:/app/storage/
             - ./config/nginx/default.conf:/etc/nginx/conf.d/default.conf
             - ./data/nginx/:/var/log/nginx
         depends_on:
