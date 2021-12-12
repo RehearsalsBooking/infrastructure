@@ -55,8 +55,6 @@ services:
 
     frontend:
         image: docker.pkg.github.com/rehearsalsbooking/frontend/frontend:production
-        volumes:
-            - frontend-volume:/frontend
         labels:
             - traefik.enable=true
             - traefik.http.routers.frontend.rule=Host(`festic.ru`)
@@ -71,6 +69,4 @@ services:
             - ./data/postgres:/var/lib/postgresql/data
 
 volumes:
-    frontend-volume:
     backend-volume:
-    public-volume:
