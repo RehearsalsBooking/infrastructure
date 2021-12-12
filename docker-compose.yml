@@ -40,6 +40,7 @@ services:
             - traefik.enable=true
             - traefik.http.routers.nginx.rule=Host(`api.festic.ru`)
             - traefik.http.routers.nginx.entrypoints=https
+            - traefik.http.routers.frontend.tls.certresolver=digital-ocean
 
     backend:
         hostname: backend
