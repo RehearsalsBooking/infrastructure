@@ -12,8 +12,8 @@ services:
             - ./config/caddy/Caddyfile:/etc/caddy/Caddyfile
             - ./data/caddy/data:/data
             - ./data/caddy/config:/config
-            - backend-volume:/srv
-            - ./data/storage/:/srv/storage/
+            - backend-volume:/app
+            - ./data/storage/:/app/storage/
         depends_on:
             - backend
             - frontend
