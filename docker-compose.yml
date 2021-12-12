@@ -48,6 +48,7 @@ services:
         volumes:
             - .env.backend:/app/.env
             -  backend-volume:/app
+            - ./data/storage/:/app/storage/
         depends_on:
             - db
 
