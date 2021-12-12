@@ -7,7 +7,8 @@ festic.ru {
 }
 
 api.festic.ru {
-    root * /backend/public
+    root * /srv/public
+    encode gzip
     php_fastcgi backend:9000
     file_server
 }

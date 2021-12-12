@@ -12,8 +12,8 @@ services:
             - ./config/caddy/Caddyfile:/etc/caddy/Caddyfile
             - ./data/caddy/data:/data
             - ./data/caddy/config:/config
-            - backend-volume:/backend
-            - ./data/storage/:/backend/storage/
+            - backend-volume:/srv
+            - ./data/storage/:/srv/storage/
     backend:
         hostname: backend
         image: docker.pkg.github.com/rehearsalsbooking/backend/backend:production
