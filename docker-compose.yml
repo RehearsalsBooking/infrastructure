@@ -47,7 +47,7 @@ services:
         restart: unless-stopped
         volumes:
             - .env.backend:/app/.env
-            - ./data/storage/:/app/storage/
+            -  backend-volume:/app
         depends_on:
             - db
 
