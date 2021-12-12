@@ -1,0 +1,13 @@
+www.festic.ru {
+	redir https://festic.ru{uri}
+}
+
+festic.ru {
+    reverse_proxy frontend
+}
+
+api.festic.ru {
+    root * /backend/public
+    php_fastcgi backend:9000
+    file_server
+}

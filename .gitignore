@@ -1,6 +1,5 @@
 .idea
 .env
 .env.backend
-/data/nginx/
 /data/postgres/
-/data/certbot/
+/data/caddy/
