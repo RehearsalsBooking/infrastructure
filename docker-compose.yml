@@ -30,7 +30,7 @@ services:
     nginx:
         image: nginx:alpine
         volumes:
-            - backend-volume:/app
+            - public-volume:/app/public
             - ./config/nginx/default.conf:/etc/nginx/conf.d/default.conf
             - ./data/nginx/:/var/log/nginx
         depends_on:
@@ -47,7 +47,8 @@ services:
         restart: unless-stopped
         volumes:
             - .env.backend:/app/.env
-            -  backend-volume:/app
+            - backend-volume:/app
+            - public-volume:/app/storage/app/public
             - ./data/storage/:/app/storage/
         depends_on:
             - db
@@ -72,3 +73,4 @@ services:
 volumes:
     frontend-volume:
     backend-volume:
+    public-volume:
