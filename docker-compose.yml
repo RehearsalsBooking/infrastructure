@@ -13,6 +13,7 @@ services:
             - ./data/caddy/data:/data
             - ./data/caddy/config:/config
             - backend-volume:/app
+            - backend-demo-volume:/app-demo
             - ./data/storage/:/app/storage/
         depends_on:
             - backend
@@ -28,8 +29,21 @@ services:
         depends_on:
             - db
 
+    backend-demo:
+        hostname: backend-demo
+        image: docker.pkg.github.com/rehearsalsbooking/backend/backend:demo
+        restart: unless-stopped
+        volumes:
+            - .env.backend-demo:/app/.env
+            - backend-demo-volume:/app
+        depends_on:
+            - db
+
     frontend:
         image: docker.pkg.github.com/rehearsalsbooking/frontend/frontend:production
+
+    frontend-demo:
+        image: docker.pkg.github.com/rehearsalsbooking/frontend/frontend:demo
 
     db:
         image: postgres:alpine
@@ -38,5 +52,11 @@ services:
         volumes:
             - ./data/postgres:/var/lib/postgresql/data
 
+    db-demo:
+        image: postgres:alpine
+        env_file:
+            - .env
+
 volumes:
     backend-volume:
+    backend-demo-volume:

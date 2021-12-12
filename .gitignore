@@ -1,5 +1,6 @@
 .idea
 .env
 .env.backend
+.env.backend-demo
 /data/postgres/
 /data/caddy/

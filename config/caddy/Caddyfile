@@ -3,12 +3,27 @@ www.festic.ru {
 }
 
 festic.ru {
+	redir https://app.festic.ru{uri}
+}
+
+app.festic.ru {
     reverse_proxy frontend
+}
+
+demo.festic.ru {
+    reverse_proxy frontend-demo
 }
 
 api.festic.ru {
     root * /app/public
     encode gzip
     php_fastcgi backend:9000
+    file_server
+}
+
+demo.api.festic.ru {
+    root * /app-demo/public
+    encode gzip
+    php_fastcgi backend-demo:9000
     file_server
 }

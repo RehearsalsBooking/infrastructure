@@ -9,6 +9,7 @@ docker_compose_bin := $(shell command -v docker-compose 2> /dev/null)
 docker_compose_base_yml := base/docker-compose.build.yml
 docker_compose_prod_yml := docker-compose.yml
 backend_service := backend
+backend_demo_service := backend-demo
 
 .PHONY : help pull build push login test clean \
          app-pull app app-push\
@@ -32,11 +33,15 @@ deploy: check-environment
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" pull
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" down -v --remove-orphans
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" up -d
-	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan storage:link --relative --force
+
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan storage:link
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan migrate --force
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan config:cache
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan route:cache
-	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan view:cache
+
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan migrate:fresh --force --seed
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan config:cache
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan route:cache
 
 check-environment:
 ifeq ("$(wildcard .env)","")
@@ -46,4 +51,8 @@ endif
 ifeq ("$(wildcard .env.backend)","")
 	- @echo Copying ".env.backend.example";
 	- cp .env.backend.example .env.backend
+endif
+ifeq ("$(wildcard .env.backend-demo)","")
+	- @echo Copying ".env.backend-demo.example";
+	- cp .env.backend-demo.example .env.backend-demo
 endif
