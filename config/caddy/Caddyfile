@@ -3,7 +3,7 @@ www.festic.ru {
 }
 
 festic.ru {
-	redir https://app.festic.ru{uri}
+	reverse_proxy landing
 }
 
 app.festic.ru {

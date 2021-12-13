@@ -39,6 +39,9 @@ services:
         depends_on:
             - db
 
+    landing:
+        image: ghcr.io/rehearsalsbooking/landing/landing:latest
+
     frontend:
         image: docker.pkg.github.com/rehearsalsbooking/frontend/frontend:production
 
