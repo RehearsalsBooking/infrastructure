@@ -41,6 +41,7 @@ deploy: check-environment
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan migrate:fresh --force --seed
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan config:cache
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan route:cache
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan key:generate
 
 check-environment:
 ifeq ("$(wildcard .env)","")
