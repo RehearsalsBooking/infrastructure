@@ -1,4 +1,4 @@
-FROM php:8-fpm-alpine
+FROM php:8.1-fpm-alpine
 
 # Install modules
 RUN set -xe && apk update && apk add --no-cache \
@@ -21,7 +21,6 @@ RUN set -xe && apk update && apk add --no-cache \
     optipng \
     pngquant \
     gifsicle \
-    unrar \
     freetype \
     libpng \
     libjpeg-turbo \
