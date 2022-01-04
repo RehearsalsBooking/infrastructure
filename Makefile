@@ -10,6 +10,9 @@ docker_compose_base_yml := base/docker-compose.build.yml
 docker_compose_prod_yml := docker-compose.yml
 backend_service := backend
 backend_demo_service := backend-demo
+frontend_service := frontend
+frontend_demo_service := frontend-demo
+landing_service := landing
 
 .PHONY : help pull build push login test clean \
          app-pull app app-push\
@@ -42,6 +45,28 @@ deploy: check-environment
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan config:cache
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan route:cache
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan key:generate
+
+deploy-backend: check-environment
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" pull
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" up -d --no-deps "$(backend_service) $(backend_demo_service)"
+
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan storage:link
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan migrate --force
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan config:cache
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan route:cache
+
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan migrate:fresh --force --seed
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan config:cache
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan route:cache
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_demo_service)" php artisan key:generate
+
+deploy-frontend: check-environment
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" pull
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" up -d --no-deps "$(frontend_service) $(frontend_demo_service)"
+
+deploy-landing: check-environment
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" pull
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" up -d --no-deps "$(landing_service)"
 
 check-environment:
 ifeq ("$(wildcard .env)","")
