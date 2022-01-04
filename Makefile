@@ -48,7 +48,8 @@ deploy: check-environment
 
 deploy-backend: check-environment
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" pull
-	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" up -d --no-deps "$(backend_service) $(backend_demo_service)"
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" up -d --no-deps "$(backend_service)"
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" up -d --no-deps "$(backend_demo_service)"
 
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan storage:link
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" exec -T "$(backend_service)" php artisan migrate --force
@@ -62,7 +63,8 @@ deploy-backend: check-environment
 
 deploy-frontend: check-environment
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" pull
-	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" up -d --no-deps "$(frontend_service) $(frontend_demo_service)"
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" up -d --no-deps "$(frontend_service)"
+	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" up -d --no-deps "$(frontend_demo_service)"
 
 deploy-landing: check-environment
 	$(docker_compose_bin) --file "$(docker_compose_prod_yml)" pull
