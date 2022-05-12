@@ -36,6 +36,7 @@ services:
         volumes:
             - .env.backend-demo:/app-demo/.env
             - backend-demo-volume:/app-demo
+            - ./data/storage-demo/:/app-demo/storage/
         depends_on:
             - db
 
